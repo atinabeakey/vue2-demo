@@ -1,7 +1,9 @@
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
-      <router-view :key="key" />
+      <el-scrollbar class="app-scrollwrapper" wrap-class="hidden-x">
+        <router-view :key="key" />
+      </el-scrollbar>
     </transition>
   </section>
 </template>
@@ -17,24 +19,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .app-main {
-  /*50 = navbar  */
-  min-height: calc(100vh - 50px);
+  // height: calc(100vh - 50px);
+  height: 100%;
   width: 100%;
   position: relative;
   overflow: hidden;
-}
-.fixed-header+.app-main {
-  padding-top: 50px;
-}
-</style>
 
-<style lang="scss">
-// fix css style bug in open el-dialog
-.el-popup-parent--hidden {
-  .fixed-header {
-    padding-right: 15px;
+  .app-scrollwrapper {
+    height: 100%;
+    overflow-x: hidden !important;
+
+    :deep(.hidden-x) {
+      overflow-x: hidden !important;
+    }
   }
+}
+
+.fixed-header+.app-main {
+  padding-top: 90px;
 }
 </style>

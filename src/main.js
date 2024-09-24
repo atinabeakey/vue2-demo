@@ -1,11 +1,11 @@
-import Vue from 'vue';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import Vue from "vue";
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+// import Echarts from "echarts";
+import "@/styles/index.scss"; // global css
+import App from "./App.vue";
 
-import '@/styles/index.scss'; // global css
-import App from './App.vue';
-
-import router from './router';
+import router from "./router";
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
@@ -13,4 +13,4 @@ Vue.use(ElementUI);
 new Vue({
   router,
   render: (h) => h(App),
-}).$mount('#app');
+}).$mount("#app");

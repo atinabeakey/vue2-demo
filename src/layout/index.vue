@@ -1,19 +1,21 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
-    dddddd
-    <sidebar class="sidebar-container" />
-    <div class="main-container">
-      <div :class="{ 'fixed-header': fixedHeader }">
-        <navbar />
+  <div class="app-wrapper">
+
+    <sidebar :style="{ width: isOpened ? '180px' : '54px' }" :isOpened='isOpened' />
+    <div class="main-container" :style="{ width: isOpened ? 'calc(100% - 180px)' : 'calc(100% - 54px)' }">
+      <div class=" fixed-header">
+        <navbar @open="open" />
+        <tag-views />
+
       </div>
       <app-main />
     </div>
-    cehsi
+
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from './components';
+import { Navbar, Sidebar, TagViews, AppMain, } from './components';
 // import ResizeMixin from './mixin/ResizeHandler';
 
 export default {
@@ -21,74 +23,78 @@ export default {
   components: {
     Navbar,
     Sidebar,
+    TagViews,
     AppMain,
   },
-  // mixins: [ResizeMixin],
-  computed: {
-    // sidebar() {
-    //   return this.$store.state.app.sidebar;
-    // },
-    // device() {
-    //   return this.$store.state.app.device;
-    // },
-    // fixedHeader() {
-    //   return this.$store.state.settings.fixedHeader;
-    // },
-    // classObj() {
-    //   return {
-    //     hideSidebar: !this.sidebar.opened,
-    //     openSidebar: this.sidebar.opened,
-    //     withoutAnimation: this.sidebar.withoutAnimation,
-    //     mobile: this.device === 'mobile',
-    //   };
-    // },
+  data() {
+    return {
+      isOpened: true
+    }
   },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false });
     },
+    open(val) {
+      this.isOpened = val
+      console.log(val, 'eeeeee')
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '~@/styles/mixin.scss';
-@import '~@/styles/variables.scss';
 
 .app-wrapper {
   @include clearfix;
   position: relative;
   height: 100%;
   width: 100%;
-  &.mobile.openSidebar {
-    position: fixed;
-    top: 0;
+  display: flex;
+
+  :deep(.sidebar-container) {
+    transition: width 0.28s;
+    width: 180px;
+    background-color: #304156;
+    height: 100%;
+    overflow: hidden;
+
+    .horizontal-collapse-transition {
+      transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
+    }
+
+    .scrollbar-wrapper {
+      overflow-x: hidden !important;
+    }
+
+    .el-scrollbar {
+      height: 100%;
+    }
+
+    .el-menu {
+      border: none;
+      height: 100%;
+      width: 100% !important;
+
+      .el-menu-item {
+        text-align: left;
+      }
+    }
   }
-}
-.drawer-bg {
-  background: #000;
-  opacity: 0.3;
-  width: 100%;
-  top: 0;
-  height: 100%;
-  position: absolute;
-  z-index: 999;
-}
 
-.fixed-header {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 9;
-  width: calc(100% - #{$sideBarWidth});
-  transition: width 0.28s;
-}
+  .main-container {
+    flex: 1;
+    position: relative;
 
-.hideSidebar .fixed-header {
-  width: calc(100% - 54px);
-}
-
-.mobile .fixed-header {
-  width: 100%;
+    .fixed-header {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 9;
+      width: 100%;
+      transition: width 0.28s;
+    }
+  }
 }
 </style>
