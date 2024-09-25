@@ -28,16 +28,13 @@ export default {
   },
   data() {
     return {
-      isOpened: true
+      isOpened: false
     }
   },
   methods: {
-    handleClickOutside() {
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false });
-    },
+
     open(val) {
       this.isOpened = val
-      console.log(val, 'eeeeee')
     }
   },
 };

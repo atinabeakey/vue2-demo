@@ -2,7 +2,7 @@
   <div class="sidebar-container">
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu :default-active="activeMenu" :collapse="!isOpened" :unique-opened="false" background-color="#304156"
-        text-color="#fff" active-text-color="#ffd04b" :collapse-transition="false" mode="vertical"
+        text-color="#fff" active-text-color="#1ddcc9" :collapse-transition="false" mode="vertical"
         @select="handleSelect">
         <sidebar-item v-for="route in routes" :key="route.path" :item="route" />
       </el-menu>

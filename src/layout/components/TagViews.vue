@@ -2,10 +2,7 @@
     <div class="tag-views">
         <ul>
             <li v-for="(item, index) in visitedViews" :key="index" :class="{ active: activeIndex === index }">
-
-                <p>
-                    {{ item.title }}sss
-                </p>
+                <p>{{ item.title }}sss</p>
                 <i class="el-icon-close hidden"></i>
             </li>
         </ul>
@@ -15,15 +12,11 @@
 export default {
     data() {
         return {
-            visitedViews: [
-                { title: 1, },
-                { title: 2, },
-                { title: 3, },
-            ],
-            activeIndex: 1
-        }
-    }
-}
+            visitedViews: [{ title: 1 }, { title: 2 }, { title: 3 }],
+            activeIndex: 1,
+        };
+    },
+};
 </script>
 <style lang="scss" scoped>
 .tag-views {
@@ -50,7 +43,7 @@ export default {
                 position: relative;
 
                 &::after {
-                    content: '';
+                    content: "";
                     display: inline-block;
                     width: 100%;
                     height: 2px;
@@ -61,7 +54,6 @@ export default {
                 }
             }
 
-
             &.active {
                 color: #1ddcc9;
 
@@ -70,7 +62,6 @@ export default {
                         background: #1ddcc9;
                     }
                 }
-
             }
 
             .hidden {
@@ -83,7 +74,6 @@ export default {
                     visibility: visible;
                 }
             }
-
         }
     }
 }
