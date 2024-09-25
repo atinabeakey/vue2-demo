@@ -1,12 +1,24 @@
 <template>
   <div class="navbar">
 
-    <hamburger :is-active="opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
-    <breadcrumb class="breadcrumb-container" />
+    <!-- <breadcrumb class="breadcrumb-container" /> -->
+    <el-dropdown>
+      <h4 class="el-dropdown-link">
+        光伏 &nbsp;<i class="el-icon-caret-bottom"></i>
+      </h4>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item>光伏1</el-dropdown-item>
+        <el-dropdown-item>光伏1</el-dropdown-item>
+        <el-dropdown-item>光伏1</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
 
     <div class="right-menu">
-
+      <i class="el-icon-search"></i>
+      <el-badge is-dot class="item">
+        <i class="el-icon-bell"></i>
+      </el-badge>
+      <i class="el-icon-setting"></i>
       <el-dropdown @command="handleCommand">
         <el-avatar icon="el-icon-user-solid"></el-avatar>
         <el-dropdown-menu slot="dropdown">
@@ -21,23 +33,16 @@
 
 <script>
 import Breadcrumb from '@/components/Breadcrumb';
-import Hamburger from '@/components/Hamburger';
+
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger,
+
   },
-  data() {
-    return {
-      opened: true
-    }
-  },
+
   methods: {
-    toggleSideBar() {
-      this.opened = !this.opened
-      this.$emit('open', this.opened)
-    },
+
     handleCommand() {
       this.$message('该功能正在开发中');
     }
@@ -52,30 +57,35 @@ export default {
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
+  .el-dropdown-link {
+    padding-left: 20px;
     cursor: pointer;
-    transition: background 0.3s;
-    -webkit-tap-highlight-color: transparent;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.025);
-    }
   }
 
-  .breadcrumb-container {
-    float: left;
-  }
 
   .right-menu {
-    float: right;
     margin-right: 20px;
-    line-height: 50px;
-    height: 100%;
-    margin-top: 5px;
+
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .item {
+
+      // margin-top: 10px;
+      :deep(.el-badge__content.is-fixed.is-dot) {
+        right: 17px;
+        top: 5px;
+      }
+    }
 
     :deep(.el-dropdown) {
       height: 100%;

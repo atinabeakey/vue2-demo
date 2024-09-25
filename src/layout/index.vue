@@ -1,10 +1,10 @@
 <template>
   <div class="app-wrapper">
 
-    <sidebar :style="{ width: isOpened ? '180px' : '54px' }" :isOpened='isOpened' />
+    <sidebar :style="{ width: isOpened ? '180px' : '54px' }" @open="open" />
     <div class="main-container" :style="{ width: isOpened ? 'calc(100% - 180px)' : 'calc(100% - 54px)' }">
       <div class=" fixed-header">
-        <navbar @open="open" />
+        <navbar />
         <tag-views />
 
       </div>

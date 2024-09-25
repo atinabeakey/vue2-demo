@@ -4,6 +4,7 @@
 
 <script>
 import * as echarts from "echarts";
+import { debounce } from "lodash";
 let myChart = null
 export default {
     props: ['timeKey'],
@@ -127,10 +128,26 @@ export default {
                 myChart.resize()
             })
 
+        },
+        //监听页面变化
+        resizeObserver() {
+            const resizeObserver = new ResizeObserver(entries => {
+                debounce(() => {
+                    myChart.resize()
+                }, 500)
+            })
+            const node = document.querySelector('.main-container')
+            resizeObserver.observe(node)
+
         }
+
     },
     mounted() {
         this.initChart()
+
+        this.resizeObserver()
+
+
     }
 }
 </script>

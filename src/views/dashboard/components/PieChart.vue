@@ -3,7 +3,8 @@
 </template>
 <script>
 import * as echarts from "echarts";
-
+import { debounce } from "lodash";
+let myChart = null
 export default {
     data() {
         return {
@@ -12,190 +13,221 @@ export default {
     },
     methods: {
         initChart() {
-            let myChart = echarts.init(document.querySelector('.pie-chart'))
-
+            myChart = echarts.init(document.querySelector('.pie-chart'))
+            const data = 40
             const option = {
-                backgroundColor: '#011864',
-                tooltip: {
-                    formatter: "{a} <br/>{b} : {c}%"
-                },
-                series: [{
-                    name: '外围刻度',
-                    type: 'gauge',
-                    radius: '90%',
-                    center: ['50%', '55%'],
-                    axisLine: {
-                        lineStyle: {
-                            width: 4,
-                            color: [[1, '#00b3ff']],
-                            shadowColor: '#fff',
-                            shadowBlur: 10
-                        },
-                    },
-                    axisLabel: {
-                        show: false
-                    },
-                    axisTick: {
-                        show: false,
-                    },
-                    detail: {
-                        show: false
-                    },
-                    pointer: {
-                        show: false
-                    }
+                tooltip: { formatter: '{a}  : {c}' },
+                series: [
+                    //底层圆
+                    {
+                        type: 'gauge',
+                        name: '实时功率',
+                        radius: '85%', // 位置
+                        center: ['50%', '50%'],
+                        startAngle: 225,
+                        endAngle: -45,
 
-                }, {
-                    name: '内层数据刻度',
-                    type: 'gauge',
-                    radius: '89%',
-                    center: ['50%', '55%'],
-                    axisLine: {
-                        lineStyle: {
-                            width: 40,
-                            color: [[0, new echarts.graphic.LinearGradient(
-                                0, 0, 1, 0,
-                                [{ offset: 0, color: '#011744' }, { offset: 1, color: '#156ad4' }]
-                            )], [1, new echarts.graphic.LinearGradient(
-                                0, 0, 1, 0,
-                                [{ offset: 0, color: '#011744' }, { offset: 1, color: '#156ad4' }]
-                            )]],
-                        }
-                    },
-                    splitLine: {
-                        length: 15,
-                        lineStyle: {
-                            width: 3,
-                            color: '#00baff'
-                        }
-                    },
-                    axisTick: {
-                        lineStyle: {
-                            color: '#00baff'
-                        }
-                    },
-                    axisLabel: {
-                        color: '#cbfff6',
-                        fontSize: 11,
-                    },
-                    detail: {
-                        show: false
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: 'cyan'
-                        }
-                    },
-                    pointer: {
-                        width: 5,
-                        length: '90%'
-                    },
-                    data: [{ value: 10 }]
-                },
-                {
-                    name: '最内层线',
-                    type: 'gauge',
-                    radius: '35%',
-                    center: ['50%', '55%'],
-                    startAngle: 359.9999999999999,
-                    endAngle: 0,
-                    axisLine: {
-                        show: false,
-                        lineStyle: {
-                            opacity: 0,
-                        }
-                    },
-                    splitLine: {
-                        show: false,
-                        lineStyle: {
-                            opacity: 0
-                        }
-                    },
-                    axisLabel: {
-                        show: false
-                    },
-                    axisTick: {
-                        length: 2,
-                        lineStyle: {
-                            color: '#00b3ff',
-                            width: 3,
-                            type: 'solid'
-                        }
-                    },
-                    detail: {
-                        show: false
-                    },
-                    pointer: {
-                        show: false
-                    }
-                },
-                {
-                    name: '饼图',
-                    tooltip: {
-                        show: false
-                    },
-                    type: 'pie',
-                    radius: ['0%', '34%'],
-                    center: ['50%', '55%'],
-                    hoverAnimation: false,
-                    itemStyle: {
-                        normal: {
-                            color: '#000939'
-                        },
-                        emphasis: {
-                            color: '#000939'
-                        }
-                    },
-                    label: {
-                        normal: {
+                        axisLine: {
                             show: true,
-                            position: 'center',
-                            formatter: function (params) {
-                                return '{value|' + params.value + '}{unit|%}\n{name|' + params.name + '}';
-                            },
-                            rich: {
-                                value: {
-                                    fontFamily: 'SFUDINEngschrift',
-                                    fontSize: 34,
-                                    color: '#fff',
-                                    verticalAlign: 'bottom'
-                                },
-                                unit: {
-                                    fontFamily: 'SFUDINEngschrift',
-                                    fontSize: 20,
-                                    color: '#fff',
-                                    lineHeight: 34,
-                                    verticalAlign: 'bottom'
-                                },
-                                name: {
-                                    fontFamily: 'Microsoft YaHei',
-                                    fontSize: 16,
-                                    color: '#2dcbff',
-                                    lineHeight: 23,
-                                }
+                            roundCap: true,
+                            lineStyle: {
+                                // 轴线样式
+                                width: 10, // 宽度
+                                color: [[1, '#e6edf0']] // 颜色
                             }
                         },
+                        detail: {
+                            // 仪表盘详情
+                            show: false
+                        },
+                        pointer: {
+                            icon: 'path://M2,0 L2.5,0 L3,100 L1.5,100z',
+                            length: '20%',
+                            offsetCenter: [0, '-45%'],
+                            itemStyle: {
+                                color: '#04d9c3'
+                            }
+                        },
+                        axisTick: {
+                            // 刻度
+                            show: false
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: 'auto',
+                            },
+                            distance: 0,
+                        },
+                        axisLabel: {
+                            show: true,
+                            // distance: 20,
+                            color: '#999'
+                        },
+                        title: {
+                            offsetCenter: [0, '-10%'],
+                            fontSize: 20
+                        },
+
+                        data: [
+                            {
+                                value: data,
+
+                            }
+                        ]
                     },
-                    labelLine: {
-                        normal: {
+                    //有色圆
+                    {
+                        type: 'gauge',
+                        radius: '89%', // 位置
+                        center: ['50%', '50%'],
+                        zlevel: 2,
+                        startAngle: 225,
+                        endAngle: -45,
+                        axisLine: {
+                            show: true,
+                            // roundCap: true,
+                            lineStyle: {
+                                // 轴线样式
+                                width: 20, // 宽度
+                                color: [
+                                    [
+                                        data / 100,
+                                        {
+                                            type: 'linear',
+                                            x: 0,
+                                            y: 1,
+                                            x2: 0,
+                                            y2: 0,
+                                            colorStops: [
+                                                {
+                                                    offset: 0,
+                                                    color: 'rgba(4,217,195,0)' // 0% 处的颜色
+                                                },
+                                                {
+                                                    offset: 0.5,
+                                                    color: 'rgba(4,217,195,0.5)' // 100% 处的颜色
+                                                },
+                                                {
+                                                    offset: 1,
+                                                    color: 'rgba(4,217,195,0.9)' // 100% 处的颜色
+                                                }
+                                            ],
+                                            global: false // 缺省为 false
+                                        }
+                                    ]
+                                ] // 颜色
+                            }
+                        },
+                        axisTick: {
+                            // 刻度
+                            show: false
+                        },
+                        splitLine: {
+                            // 分割线
+                            show: false
+                        },
+                        axisLabel: {
+                            // 刻度标签
+                            show: false
+                        },
+                        pointer: {
+                            icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
+                            length: '12%',
+                            width: 20,
+                            offsetCenter: [0, '-60%'],
+                            itemStyle: {
+                                color: 'auto'
+                            }
+                        },
+                        detail: {
+                            // 仪表盘详情
                             show: false
                         }
                     },
-                    animation: false,
-                    data: [
-                        { value: 20, name: '满意' },
-                    ]
-                }]
+
+                    {
+                        name: '实时功率',
+                        tooltip: {
+                            show: true
+                        },
+                        type: 'pie',
+                        radius: ['0%', '40%'],
+                        center: ['50%', '50%'],
+                        hoverAnimation: false,
+                        itemStyle: {
+                            normal: {
+                                color: '#fff',
+                                shadowBlur: 50,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(2, 2, 2, 0.1)'
+                            },
+                            emphasis: {
+                                color: '#fff'
+                            }
+                        },
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'center',
+                                formatter: function (params) {
+                                    return (
+                                        '{value|' +
+                                        params.value +
+                                        '}\n{name|' +
+                                        params.name +
+                                        '}\n{name|kW·h}'
+                                    );
+                                },
+                                rich: {
+                                    value: {
+                                        fontSize: 24,
+                                        color: '#182c2f',
+                                        verticalAlign: 'bottom'
+                                    },
+                                    name: {
+                                        fontSize: 14,
+                                        color: '#a7b1b7',
+                                        lineHeight: 23
+                                    }
+                                }
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        animation: false,
+                        data: [{ value: data, name: '实时功率' }]
+                    }
+                ]
             };
+
             myChart.setOption(option)
             window.addEventListener('resize', () => {
                 myChart.resize()
             })
 
+        },
+        //监听页面变化
+        resizeObserver() {
+            const resizeObserver = new ResizeObserver(entries => {
+                debounce(() => {
+                    myChart.resize()
+                }, 500)
+
+            })
+            const node = document.querySelector('.main-container')
+            resizeObserver.observe(node)
+
         }
     },
     mounted() {
         this.initChart()
+
+        this.resizeObserver()
+
+
     }
 }
 </script>

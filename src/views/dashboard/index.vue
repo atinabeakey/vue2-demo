@@ -49,7 +49,8 @@
                         <el-radio-button v-for="item in timeList" :key="item.key" :label="item.key">{{ item.label
                           }}</el-radio-button>
                       </el-radio-group>
-                      <el-date-picker v-model="dateTime" type="date" placeholder="选择日期" size="small" clearable>
+                      <el-date-picker v-model="dateTime" type="date" placeholder="选择日期" style="width:150px" size="small"
+                        clearable>
                       </el-date-picker>
                     </div>
 
@@ -61,7 +62,7 @@
 
                 </div>
 
-                <table-list class="common-border" />
+                <table-list class="common-border" style="margin-top: 20px;" />
               </el-main>
             </el-container>
           </el-main>
@@ -203,6 +204,7 @@ export default {
         border-radius: 30px;
         cursor: pointer;
         border: 1px solid transparent;
+        line-height: 28px;
 
         &.active {
           border-color: #898c8f;

@@ -1,5 +1,5 @@
 <template>
     <div>
-        功能暂未开发
+        <el-empty description="该功能正在开发中"></el-empty>
     </div>
 </template>

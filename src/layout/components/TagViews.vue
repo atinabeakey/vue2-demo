@@ -1,9 +1,10 @@
 <template>
     <div class="tag-views">
         <ul>
-            <li v-for="(item, index) in visitedViews" :key="index" :class="{ active: activeIndex === index }">
-                <p>{{ item.title }}sss</p>
-                <i class="el-icon-close hidden"></i>
+            <li v-for="(item, index) in visitedViews" :key="index" :class="{ active: activeIndex === index }"
+                @click="handleClick(index)">
+                <p>{{ item.title }}</p>
+                <!-- <i class="el-icon-close hidden"></i> -->
             </li>
         </ul>
     </div>
@@ -12,10 +13,15 @@
 export default {
     data() {
         return {
-            visitedViews: [{ title: 1 }, { title: 2 }, { title: 3 }],
-            activeIndex: 1,
+            visitedViews: [{ title: '电站' }, { title: '发电统计' },],
+            activeIndex: 0,
         };
     },
+    methods: {
+        handleClick(index) {
+            this.activeIndex = index
+        }
+    }
 };
 </script>
 <style lang="scss" scoped>
